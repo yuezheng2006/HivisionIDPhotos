@@ -9,6 +9,13 @@ services:
     command: python3 -u app.py --host 0.0.0.0 --port 7860
     ports:
       - '7860:7860'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   hivision_idphotos_api:
     build:
@@ -18,3 +25,10 @@ services:
     command: python3 deploy_api.py
     ports:
       - '8080:8080'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
